@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedro;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.algorithm.Foresight;
 import com.pedropathing.algorithm.ForesightConfig;
 import com.pedropathing.controllers.Controller;
@@ -16,7 +17,15 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@Configurable
 public class Constants {
+
+    public static double kP = 0.145;
+    public static double kI = 0;
+    public static double kD = 0.0003;
+    public static double kV = 0.063;
+    public static double offsetPod = 4.866;
+
 
     // CRIAÇÃO DO DRIVE
     public static SwerveConfig driveConfig = new SwerveConfig(
@@ -34,10 +43,15 @@ public class Constants {
                 c.motorName.set("rb");
                 c.servoName.set("rbTurn");
                 c.servoEncoderName.set("rbTurnEncoder");
-                c.turnController.set(Controller.pid(0.3, 0, 0.005)
-                        .plus(Controller.proportionalFeedforward(0)));
+                c.turnController.set(Controller.pid(kP, kI, kD)
+                        .plus(Controller.proportionalFeedforward(kV)));
                 c.driveDirection.set(DcMotorSimple.Direction.FORWARD);
                 c.servoDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.encoderReversed.set(true);
+                c.analogMinVoltage.set(0.0240);
+                c.analogMaxVoltage.set(3.2050);
+                c.angleOffsetRad.set(5.7805);
+                c.podOffset.set(Vector2D.cartesian(-offsetPod, -offsetPod));
             }
     );
     public static CoaxialPodConfig leftFront = new CoaxialPodConfig(
@@ -46,10 +60,15 @@ public class Constants {
                 c.motorName.set("lf");
                 c.servoName.set("lfTurn");
                 c.servoEncoderName.set("lfTurnEncoder");
-                c.turnController.set(Controller.pid(0.3, 0, 0.005)
-                        .plus(Controller.proportionalFeedforward(0)));
-                c.driveDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.turnController.set(Controller.pid(kP, kI, kD)
+                        .plus(Controller.proportionalFeedforward(kV)));
+                c.driveDirection.set(DcMotorSimple.Direction.REVERSE);
                 c.servoDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.analogMinVoltage.set(0.0230);
+                c.analogMaxVoltage.set(3.2010);
+                c.angleOffsetRad.set(2.4958);
+                c.podOffset.set(Vector2D.cartesian(offsetPod, offsetPod));
+                c.encoderReversed.set(true);
             }
     );
     public static CoaxialPodConfig rightFront = new CoaxialPodConfig(
@@ -58,10 +77,15 @@ public class Constants {
                 c.motorName.set("rf");
                 c.servoName.set("rfTurn");
                 c.servoEncoderName.set("rfTurnEncoder");
-                c.turnController.set(Controller.pid(0.3, 0, 0.005)
-                        .plus(Controller.proportionalFeedforward(0)));
+                c.turnController.set(Controller.pid(kP, kI, kD)
+                        .plus(Controller.proportionalFeedforward(kV)));
                 c.driveDirection.set(DcMotorSimple.Direction.FORWARD);
                 c.servoDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.encoderReversed.set(true);
+                c.analogMinVoltage.set(0.0200);
+                c.analogMaxVoltage.set(3.2000);
+                c.angleOffsetRad.set(5.0305);
+                c.podOffset.set(Vector2D.cartesian(offsetPod, -offsetPod));
             }
     );
     public static CoaxialPodConfig leftBack = new CoaxialPodConfig(
@@ -70,10 +94,15 @@ public class Constants {
                 c.motorName.set("lb");
                 c.servoName.set("lbTurn");
                 c.servoEncoderName.set("lbTurnEncoder");
-                c.turnController.set(Controller.pid(0.3, 0, 0.0086)
-                        .plus(Controller.proportionalFeedforward(0)));
+                c.turnController.set(Controller.pid(kP, kI, kD)
+                        .plus(Controller.proportionalFeedforward(kV)));
                 c.driveDirection.set(DcMotorSimple.Direction.FORWARD);
                 c.servoDirection.set(DcMotorSimple.Direction.FORWARD);
+                c.analogMinVoltage.set(0.0080);
+                c.analogMaxVoltage.set(3.1960);
+                c.encoderReversed.set(true);
+                c.angleOffsetRad.set(2.61799);
+                c.podOffset.set(Vector2D.cartesian(-offsetPod, offsetPod));
             }
     );
 

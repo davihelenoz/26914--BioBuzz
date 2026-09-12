@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedro.swerve;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.controllers.Controller;
 import com.pedropathing.revhub.drivetrains.CoaxialPod;
 import com.pedropathing.revhub.drivetrains.CoaxialPodConfig;
@@ -13,6 +14,8 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
  * You should use this to tune your swerve pod PID values
  * @author Havish Sripada
  */
+
+@Configurable
 @TeleOp
 public class SwervePIDTuner extends OpMode {
     private static final TuningMode mode = TuningMode.LEFT_FRONT;

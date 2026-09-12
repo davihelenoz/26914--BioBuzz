@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedro.swerve;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,6 +14,8 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
  * @author Havish Sripada
  *
  */
+
+@Configurable
 @TeleOp
 public class SwerveTurnTuner extends OpMode {
     boolean debugStringEnabled = false;

@@ -21,23 +21,23 @@ public class SwerveOffsetTest extends LinearOpMode {
     private static final double MIN_VOLTAGE = 0.0;
     private static final double MAX_VOLTAGE = 3.3;
 
-    private static double LF_OFFSET = 0.0;
-    private static double RF_OFFSET = 0.0;
-    private static double LB_OFFSET = 0.0;
-    private static double RB_OFFSET = 0.0;
+    private static double LF_OFFSET = 143.0;
+    private static double RF_OFFSET = 288.2;
+    private static double LB_OFFSET = 107.0;
+    private static double RB_OFFSET = 331.2;
 
     @Override
     public void runOpMode() {
 
-        lfEncoder = hardwareMap.get(AnalogInput.class, "ade");
-        rfEncoder = hardwareMap.get(AnalogInput.class, "add");
-        lbEncoder = hardwareMap.get(AnalogInput.class, "ate");
-        rbEncoder = hardwareMap.get(AnalogInput.class, "atd");
+        lfEncoder = hardwareMap.get(AnalogInput.class, "lfTurnEncoder");
+        rfEncoder = hardwareMap.get(AnalogInput.class, "rfTurnEncoder");
+        lbEncoder = hardwareMap.get(AnalogInput.class, "lbTurnEncoder");
+        rbEncoder = hardwareMap.get(AnalogInput.class, "rbTurnEncoder");
 
-        lfServo = hardwareMap.get(CRServo.class, "lf");
-        rfServo = hardwareMap.get(CRServo.class, "rf");
-        lbServo = hardwareMap.get(CRServo.class, "lb");
-        rbServo = hardwareMap.get(CRServo.class, "rb");
+        lfServo = hardwareMap.get(CRServo.class, "lfTurn");
+        rfServo = hardwareMap.get(CRServo.class, "rfTurn");
+        lbServo = hardwareMap.get(CRServo.class, "lbTurn");
+        rbServo = hardwareMap.get(CRServo.class, "rbTurn");
 
         waitForStart();
 
