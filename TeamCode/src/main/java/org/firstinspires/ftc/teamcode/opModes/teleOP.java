@@ -12,9 +12,6 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 public class teleOP extends OpMode {
 
     private Follower follower;
-    public static double turn = 0.4;
-    public static double forward = 0.0;
-    public static double strafe = 0;
 
     @Override
     public void init() {
@@ -24,9 +21,9 @@ public class teleOP extends OpMode {
     @Override
     public void loop() {
         follower.manual(
-                -forward,
-                strafe,
-                turn
+                -gamepad1.left_stick_y,
+                gamepad1.left_stick_x,
+                gamepad1.right_stick_x
         );
 
         follower.update();
