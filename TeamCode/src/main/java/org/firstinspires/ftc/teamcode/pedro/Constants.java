@@ -9,6 +9,8 @@
     import com.pedropathing.math.Vector2D;
     import com.pedropathing.revhub.drivetrains.CoaxialPod;
     import com.pedropathing.revhub.drivetrains.CoaxialPodConfig;
+    import com.pedropathing.revhub.drivetrains.Mecanum;
+    import com.pedropathing.revhub.drivetrains.MecanumConfig;
     import com.pedropathing.revhub.drivetrains.Swerve;
     import com.pedropathing.revhub.drivetrains.SwerveConfig;
     import com.pedropathing.revhub.localizers.PinpointConfig;
@@ -39,88 +41,17 @@
         public static double kV = 0.063;
         public static double offsetPod = 4.866;
 
+        public static MecanumConfig driveConfig = new MecanumConfig(
+                c -> {
+                    c.frontLeftName.set("m0");
+                    c.backLeftName.set("m1");
+                    c.frontRightName.set("m2");
+                    c.backRightName.set("m3");
 
-        // CRIAÇÃO DO DRIVE
-        public static SwerveConfig driveConfig = new SwerveConfig(
-                c -> {
-                    c.zeroPowerBehavior.set(SwerveConfig.ZeroPowerBehavior.IGNORE_ANGLE_CHANGES);
-                    c.manualBrakeMode.set(true);
-                    c.voltageCompensation.set(false);
-                }
-        );
-
-        // PODS SWERVE
-
-        // Right back module
-        public static CoaxialPodConfig rightBack = new CoaxialPodConfig(
-                c -> {
-                    c.name.set("rightBack");
-                    c.motorName.set("rb");
-                    c.servoName.set("rbTurn");
-                    c.servoEncoderName.set("rbTurnEncoder");
-                    c.turnController.set(Controller.pid(kPRB, kIRB, kDRB)
-                            .plus(Controller.proportionalFeedforward(kV)));
-                    c.driveDirection.set(DcMotorSimple.Direction.FORWARD);
-                    c.servoDirection.set(DcMotorSimple.Direction.FORWARD);
-                    c.encoderReversed.set(true);
-                    c.analogMinVoltage.set(0.0240);
-                    c.analogMaxVoltage.set(3.2050);
-                    c.angleOffsetRad.set(5.8905);
-                    c.podOffset.set(Vector2D.cartesian(-offsetPod, -offsetPod));
-                }
-        );
-        // Left front module
-        public static CoaxialPodConfig leftFront = new CoaxialPodConfig(
-                c -> {
-                    c.name.set("leftFront");
-                    c.motorName.set("lf");
-                    c.servoName.set("lfTurn");
-                    c.servoEncoderName.set("lfTurnEncoder");
-                    c.turnController.set(Controller.pid(kPLF, kILF, kDLF)
-                            .plus(Controller.proportionalFeedforward(kV)));
-                    c.driveDirection.set(DcMotorSimple.Direction.REVERSE);
-                    c.servoDirection.set(DcMotorSimple.Direction.FORWARD);
-                    c.analogMinVoltage.set(0.0230);
-                    c.analogMaxVoltage.set(3.2010);
-                    c.angleOffsetRad.set(2.2288);
-                    c.podOffset.set(Vector2D.cartesian(offsetPod, offsetPod));
-                    c.encoderReversed.set(true);
-                }
-        );
-        // Right front module
-        public static CoaxialPodConfig rightFront = new CoaxialPodConfig(
-                c -> {
-                    c.name.set("rightFront");
-                    c.motorName.set("rf");
-                    c.servoName.set("rfTurn");
-                    c.servoEncoderName.set("rfTurnEncoder");
-                    c.turnController.set(Controller.pid(kPRF, kIRF, kDRF)
-                            .plus(Controller.proportionalFeedforward(kV)));
-                    c.driveDirection.set(DcMotorSimple.Direction.FORWARD);
-                    c.servoDirection.set(DcMotorSimple.Direction.FORWARD);
-                    c.encoderReversed.set(true);
-                    c.analogMinVoltage.set(0.0200);
-                    c.analogMaxVoltage.set(3.2000);
-                    c.angleOffsetRad.set(5.1871);
-                    c.podOffset.set(Vector2D.cartesian(offsetPod, -offsetPod));
-                }
-        );
-        // Left back module
-        public static CoaxialPodConfig leftBack = new CoaxialPodConfig(
-                c -> {
-                    c.name.set("leftBack");
-                    c.motorName.set("lb");
-                    c.servoName.set("lbTurn");
-                    c.servoEncoderName.set("lbTurnEncoder");
-                    c.turnController.set(Controller.pid(kPLB, kILB, kDLB)
-                            .plus(Controller.proportionalFeedforward(kV)));
-                    c.driveDirection.set(DcMotorSimple.Direction.FORWARD);
-                    c.servoDirection.set(DcMotorSimple.Direction.FORWARD);
-                    c.analogMinVoltage.set(0.0080);
-                    c.analogMaxVoltage.set(3.1960);
-                    c.encoderReversed.set(true);
-                    c.angleOffsetRad.set(5.6235);
-                    c.podOffset.set(Vector2D.cartesian(-offsetPod, offsetPod));
+                    c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+                    c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+                    c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
+                    c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
                 }
         );
 
@@ -159,12 +90,10 @@
 
         // CRIAÇÃO DO FOLLOWER
         public static Follower create(HardwareMap h) {
-            CoaxialPod leftFrontPod = new CoaxialPod(h, leftFront);
-            CoaxialPod rightFrontPod = new CoaxialPod(h, rightFront);
-            CoaxialPod leftBackPod = new CoaxialPod(h, leftBack);
-            CoaxialPod rightBackPod = new CoaxialPod(h, rightBack);
-            return new Follower(new PinpointLocalizer(h, localizerConfig),
-                    new Swerve(h, driveConfig, leftBackPod, leftFrontPod, rightBackPod, rightFrontPod),
-                    new Foresight(foresightConfig));
+            return new Follower(
+                    new PinpointLocalizer(h, localizerConfig),
+                    new Mecanum(h, driveConfig),
+                    new Foresight(foresightConfig)
+            );
         }
     }
