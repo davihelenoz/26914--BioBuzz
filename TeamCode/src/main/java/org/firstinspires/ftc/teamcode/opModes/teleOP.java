@@ -8,15 +8,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Configurable
 @TeleOp(name = "TeleOp")
 public class teleOP extends OpMode {
-    private boolean IsINTbothOn = false;
-
-    private boolean Trava = true;
-
-    private boolean Dumper = false;
 
     private Follower follower;
     private Intake Inteiki;
@@ -25,7 +21,8 @@ public class teleOP extends OpMode {
     public void init() {
 
         follower = Constants.create(hardwareMap);
-        Inteiki = new Intake(hardwareMap);
+        Inteiki = new Intake(hardwareMap, gamepad1);
+        Shooter.init(hardwareMap);
     }
 
     @Override
@@ -35,46 +32,18 @@ public class teleOP extends OpMode {
                 -gamepad1.left_stick_x * 0.3,
                 gamepad1.right_stick_x * 0.3
         );
-        if(gamepad1.squareWasPressed()) {
-            if (IsINTbothOn) {
-                IsINTbothOn = false;
-            }
-            else {
-                IsINTbothOn = true;
-            }
+        if (gamepad1.right_bumper) {
+            Shooter.setRPM(1000, hardwareMap);
+        } else if (gamepad1.left_bumper) {
+            Shooter.setRPM(0, hardwareMap);
         }
-        if (IsINTbothOn) {
-            Inteiki.AllOn(1);
-        } else {
-            Inteiki.InOn(gamepad1.left_trigger);
-            Inteiki.BackOn(gamepad1.right_trigger);
-        }
-        if(gamepad1.triangleWasPressed()) {
-            if (Trava) {
-                Trava = false;
-            }
-            else {
-                Trava = true;
-            }
-        }
-        if(gamepad1.crossWasPressed()) {
-            if (Dumper) {
-                Dumper = false;
-            }
-            else {
-                Dumper = true;
-            }
-        }
-        if (Trava) {
-            Inteiki.Trava(true);
-        } else {
-            Inteiki.Trava(false);
-        }
-        if (Dumper) {
-            Inteiki.Dumper(true);
-        } else {
-            Inteiki.Dumper(false);
-        }
+        Inteiki.teleop();
+
+        telemetry.addData("Motor 1 current", Inteiki.getmAhINT1());
+        telemetry.addData("Motor 2 current", Inteiki.getmAhINT2());
+        telemetry.addData("Shooter RPM", Shooter.getRPM(hardwareMap));
+
+        telemetry.update();
         follower.update();
 
     }
