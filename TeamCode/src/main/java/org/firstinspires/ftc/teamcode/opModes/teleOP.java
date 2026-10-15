@@ -17,12 +17,14 @@ public class teleOP extends OpMode {
     private Follower follower;
     private Intake Inteiki;
 
+    private Shooter shuter;
+
     @Override
     public void init() {
 
         follower = Constants.create(hardwareMap);
         Inteiki = new Intake(hardwareMap, gamepad1);
-        Shooter.init(hardwareMap);
+        shuter = new Shooter(hardwareMap);
     }
 
     @Override
@@ -32,16 +34,13 @@ public class teleOP extends OpMode {
                 -gamepad1.left_stick_x * 0.3,
                 gamepad1.right_stick_x * 0.3
         );
-        if (gamepad1.right_bumper) {
-            Shooter.setRPM(1000, hardwareMap);
-        } else if (gamepad1.left_bumper) {
-            Shooter.setRPM(0, hardwareMap);
+        if(gamepad1.circle) {
+            shuter.ShooterRPM(3000.0);
         }
         Inteiki.teleop();
 
         telemetry.addData("Motor 1 current", Inteiki.getmAhINT1());
         telemetry.addData("Motor 2 current", Inteiki.getmAhINT2());
-        telemetry.addData("Shooter RPM", Shooter.getRPM(hardwareMap));
 
         telemetry.update();
         follower.update();
