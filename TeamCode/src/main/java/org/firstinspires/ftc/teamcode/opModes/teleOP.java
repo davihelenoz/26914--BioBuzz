@@ -19,6 +19,7 @@ public class teleOP extends OpMode {
 
     private Shooter shuter;
 
+
     @Override
     public void init() {
 
@@ -35,7 +36,7 @@ public class teleOP extends OpMode {
                 gamepad1.right_stick_x * 0.3
         );
         if(gamepad1.circle) {
-            shuter.ShooterRPM(3000.0);
+            shuter.ShooterRPM(3000);
         }
         Inteiki.teleop();
 
